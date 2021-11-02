@@ -3,7 +3,7 @@
   */
 
 
- const ticTacToeGame = (moveX, move0) => {
+const ticTacToeGame = (moveX, move0) => {
    let board = [
       [null, null, null],
       [null, null, null],
@@ -30,40 +30,29 @@ const movesOnBoard = (row, column, move, board) => {
    let x = row;
    let y = column;
    board[x][y] = move;
-   console.log("board",board);
+   console.log("board", board);
    return findWinner(board);
 };
 
 const findWinner = (board) => {
-
-   if ((board[0][0] !== null) &&
-      ((board[0][0] === board[0][1] && board[0][0] === board[0][2]) ||
-         (board[0][0] === board[1][1] && board[0][0] === board[2][2]) ||
-         (board[0][0] === board[1][0] && board[0][0] === board[2][0]))) 
-      return board[0][0];
-
-
-   if ((board[0][2] !== null) &&
-      ((board[0][2] === board[1][2] && board[0][2] === board[2][2]) ||
-         (board[0][2] === board[1][1] && board[0][2] === board[2][0])))    
-      return board[0][2];
-
-   if (board[0][1] !== null && board[0][1] === board[1][1] && board[0][1] === board[2][1]) 
-      return board[0][1];
-   
+   let flatBoard = board.flat();
+   for (let i = 0; i < 8; i += 3) {
+      if (flatBoard[i] !== null && flatBoard[i] === flatBoard[i + 1] && flatBoard[i] === flatBoard[i + 2])
+         return flatBoard[i];
+   };
+   for (i = 0; i < 3; i++) {
+      if (flatBoard[i] !== null && flatBoard[i] === flatBoard[i + 3] && flatBoard[i] === flatBoard[i + 6])
+         return flatBoard[i];
+   };
+   if (flatBoard[0] !== null && flatBoard[0] === flatBoard[4] && flatBoard[0] === flatBoard[8])
+      return flatBoard[0];
+   if (flatBoard[2] !== null && flatBoard[2] === flatBoard[4] && flatBoard[2] === flatBoard[6])
+      return flatBoard[2];
    else
-      if (board[1][0] !== null && board[1][0] === board[1][1] && board[1][0] === board[1][2])   
-         return board[1][0];
-      
+      if (board.some(row => row.includes(null)))
+         return "Still Not Decided";
       else
-         if (board[2][0] !== null && board[2][0] === board[2][1] && board[2][0] === board[2][2])   
-            return board[2][0];
-         
-         else
-            if (board.some(row => row.includes(null)))
-               return "Still Not Decided";
-            else           
-               return "No Winner in this game";         
+         return "No Winner in this game";
 };
 
-module.exports = { ticTacToeGame, findWinner };
+module.exports = { ticTacToeGame };
